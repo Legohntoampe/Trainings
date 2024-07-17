@@ -1,9 +1,10 @@
 package com.pluralstraining.conf_demo.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Type;
+
+
+import java.util.List;
 
 @Entity(name="speakers")
 public class Speaker {
@@ -15,8 +16,22 @@ public class Speaker {
     private String title;
     private String company;
     private String speaker_bio;
+    @Lob
+    //@Type(type = "org.hybernate.type.BinaryType")// this does not work on the newer hibernate 6.* which is the default that comes with spring 3.* I will have to find a work around for this
+    //check to see if removing the @Type annotation works otherwise need to figure out what the replacement for this deprecated code is.
+    private byte[] speaker_photo;
+    @ManyToMany(mappedBy="speakers")
+    private List<Session> sessions;
     public Speaker(){
 
+    }
+
+    public byte[] getSpeaker_photo() {
+        return speaker_photo;
+    }
+
+    public void setSpeaker_photo(byte[] speaker_photo) {
+        this.speaker_photo = speaker_photo;
     }
 
     public Long getSpeaker_id() {
